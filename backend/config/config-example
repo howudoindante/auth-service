@@ -1,0 +1,28 @@
+env: "local"
+
+для локальной разработки config.local.yml
+для деплоя confgi.yml
+
+http_server:
+  address: "0.0.0.0:8082"
+  timeout: 4s
+  idle_timeout: 60s
+
+database:
+  # Хост или IP сервера БД
+  host: "postgres"
+  # Порт, на котором слушает PostgreSQL
+  port: 5432
+  # Имя пользователя
+  user: "username"
+  # Пароль (не храните секреты в публичных репо!)
+  pass: "password"
+  # Имя базы данных
+  name: "dbname"
+  # Режим SSL: disable, require, verify-full и т. д.
+  sslmode: "disable"
+
+
+jwt:
+  access_secret: "secret"
+  refresh_secret: "secret"
