@@ -12,7 +12,6 @@ import (
 	"auth/pkg/logger"
 	"context"
 	"errors"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"log"
 	"log/slog"
@@ -34,14 +33,7 @@ func main() {
 		console.Info("Logger working in info mode")
 	}
 
-	dsn := fmt.Sprintf(
-		"host=%s port=%d user=%s password=%s dbname=%s sslmode=%s",
-		cfg.Database.Host, cfg.Database.Port,
-		cfg.Database.User, cfg.Database.Pass,
-		cfg.Database.Name, cfg.Database.SSLMode,
-	)
-
-	db, err := database.ConnectDB(dsn)
+	db, err := database.InitDatabaseWithSchema(cfg.Database)
 
 	if err != nil {
 		log.Fatal(err.Error())
@@ -50,7 +42,7 @@ func main() {
 	if err := db.AutoMigrate(
 		&models.User{},
 	); err != nil {
-		log.Fatalf("Migration failed: %v", err)
+		console.Info("Migration failed: %v", err)
 	}
 
 	r := router.New() // например, Gin Engine

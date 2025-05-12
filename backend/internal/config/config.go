@@ -8,21 +8,25 @@ import (
 	"time"
 )
 
+type Jwt struct {
+	AccessSecret  string `yaml:"access_secret"  env-required:"true"`
+	RefreshSecret string `yaml:"refresh_secret"  env-required:"true"`
+}
+
+type Database struct {
+	Host    string `yaml:"host"     env-default:"localhost"`
+	Port    int    `yaml:"port"     env-default:"5432"`
+	User    string `yaml:"user"     env-required:"true"`
+	Pass    string `yaml:"pass"     env-required:"true"`
+	Name    string `yaml:"name"     env-required:"true"`
+	SSLMode string `yaml:"sslmode"  env-default:"disable"`
+	Scheme  string `yaml:"scheme"`
+}
 type Config struct {
 	Env        string     `yaml:"env" env-default:"local"`
 	HttpConfig HttpConfig `yaml:"http_server"`
-	Database   struct {
-		Host    string `yaml:"host"     env-default:"localhost"`
-		Port    int    `yaml:"port"     env-default:"5432"`
-		User    string `yaml:"user"     env-required:"true"`
-		Pass    string `yaml:"pass"     env-required:"true"`
-		Name    string `yaml:"name"     env-required:"true"`
-		SSLMode string `yaml:"sslmode"  env-default:"disable"`
-	} `yaml:"database"`
-	Jwt struct {
-		AccessSecret  string `yaml:"access_secret"  env-required:"true"`
-		RefreshSecret string `yaml:"refresh_secret"  env-required:"true"`
-	}
+	Database   Database   `yaml:"database"`
+	Jwt        Jwt        `yaml:"jwt"`
 }
 
 type HttpConfig struct {

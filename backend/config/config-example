@@ -21,6 +21,7 @@ database:
   name: "dbname"
   # Режим SSL: disable, require, verify-full и т. д.
   sslmode: "disable"
+  scheme: "scheme_name"
 
 
 jwt:
