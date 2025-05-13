@@ -14,13 +14,14 @@ type Jwt struct {
 }
 
 type Database struct {
-	Host    string `yaml:"host"     env-default:"localhost"`
-	Port    int    `yaml:"port"     env-default:"5432"`
-	User    string `yaml:"user"     env-required:"true"`
-	Pass    string `yaml:"pass"     env-required:"true"`
-	Name    string `yaml:"name"     env-required:"true"`
-	SSLMode string `yaml:"sslmode"  env-default:"disable"`
-	Scheme  string `yaml:"scheme"`
+	Host               string `yaml:"host"     env-default:"localhost"`
+	Port               int    `yaml:"port"     env-default:"5432"`
+	User               string `yaml:"user"     env-required:"true"`
+	Pass               string `yaml:"pass"     env-required:"true"`
+	Name               string `yaml:"name"     env-required:"true"`
+	SSLMode            string `yaml:"sslmode"  env-default:"disable"`
+	Scheme             string `yaml:"scheme"`
+	ConnectingAttempts int    `yaml:"connecting_attempts"  env-default:"5"`
 }
 type Config struct {
 	Env        string     `yaml:"env" env-default:"local"`

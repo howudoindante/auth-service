@@ -15,9 +15,9 @@ func InitDatabaseWithSchema(cfg config.Database) (*gorm.DB, error) {
 		"host=%s port=%d user=%s password=%s sslmode=%s dbname=postgres",
 		cfg.Host, cfg.Port, cfg.User, cfg.Pass, cfg.SSLMode,
 	)
-	adminDB, err := gorm.Open(postgres.Open(adminDSN), &gorm.Config{})
+	adminDB, err := waitForDB(adminDSN, cfg.ConnectingAttempts)
 	if err != nil {
-		return nil, fmt.Errorf("failed to connect to postgres db: %w", err)
+		return nil, fmt.Errorf("failed to connect after %d attempts: %w", cfg.ConnectingAttempts, err)
 	}
 
 	// Создание БД, если не существует
@@ -41,15 +41,13 @@ func InitDatabaseWithSchema(cfg config.Database) (*gorm.DB, error) {
 		return nil, fmt.Errorf("failed to connect to %s: %w", cfg.Name, err)
 	}
 
-	// Создание расширения и схемы
-	if err := db.Exec(`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`).Error; err != nil {
-		log.Printf("warning: uuid-ossp extension error: %v", err)
-	}
 	if cfg.Scheme != "" {
 		if err := db.Exec(fmt.Sprintf(`CREATE SCHEMA IF NOT EXISTS "%s"`, cfg.Scheme)).Error; err != nil {
-			log.Printf("warning: schema creation error: %v", err)
+			fmt.Printf("warning: schema creation error: %v", err)
 		}
 	}
+
+	db.Exec(`CREATE EXTENSION IF NOT EXISTS pgcrypto`)
 
 	// Возвращаем подключение с search_path
 	finalDSN := fmt.Sprintf(

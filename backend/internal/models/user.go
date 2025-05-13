@@ -7,8 +7,7 @@ import (
 )
 
 type User struct {
-	// Используем UUID вместо числового ID.
-	ID        uuid.UUID `gorm:"type:uuid;default:uuid_generate_v4();primaryKey"`
+	ID        uuid.UUID `gorm:"type:uuid;default:gen_random_uuid();primaryKey"`
 	Username  string    `gorm:"type:varchar(100);uniqueIndex;not null"`
 	Email     string    `gorm:"type:varchar(255);uniqueIndex;not null"`
 	Password  string    `gorm:"type:varchar(60);not null"` // bcrypt‑хеш обычно 60 символов

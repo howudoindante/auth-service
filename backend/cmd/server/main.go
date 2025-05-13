@@ -38,6 +38,9 @@ func main() {
 	if err != nil {
 		log.Fatal(err.Error())
 	}
+	db = db.Debug()
+
+	db.Exec(`CREATE EXTENSION IF NOT EXISTS "uuid-ossp";`)
 
 	if err := db.AutoMigrate(
 		&models.User{},
